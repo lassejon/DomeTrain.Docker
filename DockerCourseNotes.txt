@@ -1,0 +1,42 @@
+What is containers?
+
+Kind of like a lightweight VM, but not  quite. It can be thought of as a virtualized OS sharing host kernel where you can run apps (sql server, java app and jvm, .net app and .net etc.). It is an instance of an image. An exited container is not the same as an image, as it can be restarted and will retain its settings and any filesystem changes.
+
+What is an image?
+
+It is like a snapshot or a template of the environment containing app(s). An image needs to be spun up in a container. It is the static file on your host system. If you have spun up a sql server for instance and you save data to it, it will not get saved in your image, it will get saved in the container instance of the image.
+
+Images can be referered to by their repositories and their tag. The tag is a pointer to the image id in that repository:
+    mr.microsoft.com/mssql/sqlserver    2022-latest     b71...
+    nginx                               latest          593...
+
+to pull one of the above use:
+    docker pull mr.microsoft.com/mssql/sqlserver:2022-latest
+
+The latest tag always refers to the latest published version of the image and is implicitly used when not specififying the tag in a pull or run command. 
+
+Save a modified container as an image command:
+    docker commit {CONTAINER-ID} {NEW-IMAGE-NAME}
+
+What are layers?
+
+Layers are what an image is compromised of, typically containing a base layer which can be something like Debian, Ubuntu or Windows.
+
+On top of that there will be image layers.
+
+These two are read-only. 
+
+Lastly there is the container layer which is also write. This layer exists when we spin om the image. It will look something like this:
+
+Container   *    Container layer
+
+            |    Image layer
+Image       |    Image layer
+            |    Image layer
+            |    Base image layer
+
+Layers will be cached locally, meaning if you want to pull an image containing an already exisisting image, it will not download it twice.
+
+What is container registries?
+
+It's a place to push images to store and to share, where you can pull images down to your local machine.

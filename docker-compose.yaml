@@ -1,0 +1,34 @@
+services:
+  client:
+    build:
+      context: ./DockerCourseFrontend/.
+      dockerfile: DockerCourseFrontend/Dockerfile
+    image: client
+    container_name: client
+    ports:
+      - 1234:80
+
+  api:
+    build:
+      context: ./DockerCourseApi/.
+      dockerfile: DockerCourseApi\Dockerfile
+    image: api
+    container_name: api
+    ports:
+      - 5001:80
+
+  database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: database
+    environment:
+      - ACCEPT_EULA=true
+      - MSSQL_SA_PASSWORD=Passw0rd
+    ports:
+      - 1433:1433
+
+  database-seed:
+    depends_on: [ database ]
+    build:
+      context: Database/
+      dockerfile: Dockerfile
+    container_name: database-seed
